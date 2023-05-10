@@ -1,4 +1,5 @@
-WITH Main_Query AS(
+WITH Main_Query AS --спочатку створюємо основний запит з допомогою WITH
+(
     SELECT 
         S.[Id_session]
         ,S.[purchase]
@@ -8,14 +9,14 @@ WITH Main_Query AS(
         ,SS.[Group]
     FROM
         [TestDB].[dbo].[Sales] AS S
-    JOIN
+    JOIN --об'єднуємо таблицю Sales та  Events
         [TestDB].[dbo].[Events] AS E
         ON S.Id_session = E.Id_session
-    JOIN
+    JOIN --об'єднуємо таблицю Sales та  Session
         [TestDB].[dbo].[Session] AS SS
         ON SS.Id_session = S.Id_session
-),
-Sum_Query AS
+), --таким чином ми створили запит з усіма потрібними даними
+Sum_Query AS --створюємо запит для отримання сум для груп та id
 (
     SELECT
         [Id_test]
@@ -29,7 +30,7 @@ Sum_Query AS
         ,[Group]
         ,[Event_type]
 ),
-Event_Query AS
+Event_Query AS--створюємо запит для отримання подій з id та group
 (
     SELECT
         [Id_test]
@@ -43,7 +44,7 @@ Event_Query AS
         ,[Group]
         ,[Event_type]
 ),
-Events_and_sales AS
+Events_and_sales AS --об'єднуємо запити подій та сум
 (
     SELECT 
         [Id_test]
@@ -61,7 +62,7 @@ Events_and_sales AS
     FROM 
         Event_Query
 )
-SELECT 
+SELECT --виведення остаточно результату
     [Id_test]
     ,[Group]
     ,[Event_type]
