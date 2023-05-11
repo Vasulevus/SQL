@@ -1,6 +1,6 @@
 WITH Group_Sum_Query AS
---спочатку створюємо перший запит з допомогою WITH
-(    SELECT 
+--спочатку запит з допомогою CTE
+(    SELECT -- в цьому запиті ми групуємо дані сум по сесіям, це необхідно для кінцевого запиту
         S.[Id_session]
         ,SUM(S.[purchase]) AS [purchase]
     FROM
@@ -9,7 +9,7 @@ WITH Group_Sum_Query AS
 ),
 Main_Sum_Query AS 
 (
-    SELECT 
+    SELECT --в цьому запиті з'єднуємо попередній із даними по сесіям
         S.[Id_session]
         ,S.[purchase]
         ,SS.[Id_test]
@@ -21,7 +21,7 @@ Main_Sum_Query AS
 ),
 Sum_Query AS 
 (
-        SELECT
+        SELECT -- в цьому запиті групуємо поля попереднього запиту та додаємо поле Event_type
         [Id_test]
         ,[Group]
         ,'sales' AS [Event_type]
@@ -35,8 +35,7 @@ Sum_Query AS
 ),
 Main_Event_Query AS
 (
-    SELECT 
-
+    SELECT --об'єднуємо таблицю сесій та подій в єдину таблицю
         E.[Id]
         ,E.[Event_type]
         ,SS.[Id_test]
@@ -44,13 +43,13 @@ Main_Event_Query AS
     FROM
         [TestDB].[dbo].[Events] AS E
 
-    JOIN --об'єднуємо таблицю Sales та  Session
+    JOIN --об'єднуємо таблицю Events та  Session
         [TestDB].[dbo].[Session] AS SS
         ON SS.Id_session = E.Id_session
 ),
 Event_Query AS
 (
-        SELECT
+        SELECT --групуємо поля попереднього запиту та рахуємо кількість подій
         [Id_test]
         ,[Group]
         ,[Event_type]
