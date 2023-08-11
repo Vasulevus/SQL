@@ -87,7 +87,7 @@ ORDER BY numbers
 2
 
 2.1 
---допрацювати
+--допрацювати анти джойн та розподіл по днях
 SELECT
 	[user],
 	[session],
@@ -96,5 +96,7 @@ SELECT
 FROM 
 	test.dbo.data_set_da_test
 WHERE
-	[session] NOT IN ( анти джойн із зі списком сесій, в яких не було event_type add_to cart чи page_type = order_page)
+	[session] NOT IN --( анти джойн із зі списком сесій, в яких не було event_type add_to cart чи page_type = order_page)
+
+
 GROUP BY [user], [page_type],[session];
